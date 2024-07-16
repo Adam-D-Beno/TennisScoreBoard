@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-public interface Repository<E, K extends Serializable> {
+public interface Repository<E, K extends Serializable>{
 
-    Long save (E entity);
-    Optional<E> getById(Long id);
+    E save (E entity);
+    Optional<E> getById(K id);
     List<E> getAllGames();
 }

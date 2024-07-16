@@ -10,6 +10,8 @@ public class HibernateConfig {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
 
+    public HibernateConfig() {
+    }
 
     private static SessionFactory buildSessionFactory() {
        return getConfiguration().buildSessionFactory();
