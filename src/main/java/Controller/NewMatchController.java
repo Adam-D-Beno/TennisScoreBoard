@@ -18,11 +18,9 @@ public class NewMatchController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String firstPlayerName = req.getParameter("player1");
         String secondPlayerName = req.getParameter("player2");
 
-        System.out.println();
     }
 
 }
