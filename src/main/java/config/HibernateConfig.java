@@ -5,7 +5,7 @@ import lombok.experimental.UtilityClass;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-@Setter
+
 public class HibernateConfig {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
@@ -13,7 +13,7 @@ public class HibernateConfig {
     public HibernateConfig() {
     }
 
-    private static SessionFactory buildSessionFactory() {
+    public static SessionFactory buildSessionFactory() {
        return getConfiguration().buildSessionFactory();
     }
 

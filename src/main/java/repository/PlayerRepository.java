@@ -1,10 +1,8 @@
 package repository;
 
-import entity.Match;
 import entity.Player;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +10,6 @@ import java.util.Optional;
 public class PlayerRepository implements Repository<Player, Long> {
 
     private final Session session;
-    private final Class<?> aClass;
 
     @Override
     public Player save(Player player) {
