@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "/matches")
+@WebServlet(name = "matches", value = "/matches")
 public class MatchesController extends HttpServlet {
 
     @Override

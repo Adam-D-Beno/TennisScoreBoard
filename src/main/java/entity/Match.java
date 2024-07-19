@@ -21,7 +21,7 @@ public class Match {
     @JoinColumn(name = "playerTwoId")
     private Player player2;
     @OneToOne
-    @JoinColumn(name = "playerId")
+    @JoinColumn(name = "playerWinId")
     private Player winner;
 
 }
