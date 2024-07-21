@@ -24,6 +24,12 @@ public class PlayerRepository implements Repository<Player, Long> {
 
     @Override
     public List<Player> getAllGames() {
-        return session.createQuery("select p from Player p").getResultList();
+        return session.createQuery("select p from Player p", Player.class).getResultList();
+    }
+
+    @Override
+    public Optional<Player> getByName(String playerName) {
+        return session.createQuery("select p from Player p where name = :name", Player.class)
+                .setParameter("name", playerName).uniqueResultOptional();
     }
 }

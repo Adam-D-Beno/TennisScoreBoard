@@ -5,21 +5,29 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import service.NewMatchService;
 
 import java.io.IOException;
+import java.util.UUID;
 
-@WebServlet(name = "new-match", value = "/new-match")
+@WebServlet(name = "new-match", urlPatterns = "/new-match")
 public class NewMatchController extends HttpServlet {
+    private final NewMatchService newMatchService;
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-       resp.getWriter().write("Salam");
+    public NewMatchController() {
+        this.newMatchService = new NewMatchService();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String firstPlayerName = req.getParameter("player1");
-        String secondPlayerName = req.getParameter("player2");
+//        String firstPlayerName = req.getParameter("player1");
+//        String secondPlayerName = req.getParameter("player2");
+//        UUID match_id = newMatchService.CreateNewMatch(firstPlayerName, secondPlayerName);
+
+        String contextPath = req.getContextPath();
+        System.out.println();
+
+//        resp.sendRedirect("http://localhost:8080/match-score.jsp?uuid=$" + match_id);
 
     }
 

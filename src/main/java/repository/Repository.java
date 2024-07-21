@@ -9,4 +9,5 @@ public interface Repository<E, K extends Serializable>{
     E save (E entity);
     Optional<E> getById(K id);
     List<E> getAllGames();
+    Optional<E> getByName(String name);
 }
