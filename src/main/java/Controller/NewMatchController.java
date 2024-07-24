@@ -20,15 +20,9 @@ public class NewMatchController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        String firstPlayerName = req.getParameter("player1");
-//        String secondPlayerName = req.getParameter("player2");
-//        UUID match_id = newMatchService.CreateNewMatch(firstPlayerName, secondPlayerName);
-
-        String contextPath = req.getContextPath();
-        System.out.println();
-
-//        resp.sendRedirect("http://localhost:8080/match-score.jsp?uuid=$" + match_id);
-
+        String firstPlayerName = req.getParameter("player1");
+        String secondPlayerName = req.getParameter("player2");
+        UUID match_id = newMatchService.CreateNewMatch(firstPlayerName, secondPlayerName);
+        resp.sendRedirect("/match-score.jsp?uuid=$" + match_id);
     }
-
 }

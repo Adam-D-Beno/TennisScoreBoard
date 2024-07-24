@@ -1,15 +1,16 @@
 package repository;
 
+import config.HibernateConfig;
 import entity.Player;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class PlayerRepository implements Repository<Player, Long> {
 
-    private final Session session;
+    private Session session;
 
     @Override
     public Player save(Player player) {
