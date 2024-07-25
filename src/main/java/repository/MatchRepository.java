@@ -8,26 +8,25 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 public class MatchRepository implements Repository<Match, Long> {
-    private final Session session;
 
     @Override
-    public Match save(Match match) {
+    public Match save(Match match, Session session) {
         session.save(match);
         return match;
     }
 
     @Override
-    public Optional<Match> getById(Long id) {
+    public Optional<Match> getById(Long id, Session session) {
         return Optional.ofNullable(session.get(Match.class, id));
     }
 
     @Override
-    public List<Match> getAllGames() {
+    public List<Match> getAllGames(Session session) {
         return null;
     }
 
     @Override
-    public Optional<Match> getByName(String name) {
+    public Optional<Match> getByName(String name, Session session) {
         return Optional.empty();
     }
 }

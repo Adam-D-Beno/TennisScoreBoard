@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 @Entity
 @Table(name = "players")
 @Builder
-public class Player implements Serializable {
+public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

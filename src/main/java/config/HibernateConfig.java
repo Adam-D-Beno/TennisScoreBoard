@@ -13,11 +13,7 @@ public class HibernateConfig {
     }
 
     public static SessionFactory buildSessionFactory() {
-        try(SessionFactory sessionFactory = getConfiguration().buildSessionFactory()) {
-            return sessionFactory;
-        } catch (HibernateException e) {
-            throw new ExceptionInInitializerError(e);
-        }
+            return getConfiguration().buildSessionFactory();
     }
 
     private static Configuration getConfiguration() {
