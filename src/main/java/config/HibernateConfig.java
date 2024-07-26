@@ -1,11 +1,8 @@
 package config;
 
-import lombok.Getter;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-
 
 public class HibernateConfig {
     private static volatile HibernateConfig instance;
@@ -34,8 +31,7 @@ public class HibernateConfig {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            SessionFactory sessionFactory = getConfiguration().buildSessionFactory();
-            return sessionFactory;
+            return getConfiguration().buildSessionFactory();
         } catch (HibernateException e) {
             throw new ExceptionInInitializerError(e);
         }
