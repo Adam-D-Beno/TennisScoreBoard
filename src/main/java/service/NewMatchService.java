@@ -1,5 +1,6 @@
 package service;
 
+import config.HibernateConfig;
 import entity.Match;
 import entity.Player;
 import model.MatchScoreModel;
@@ -7,10 +8,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import repository.PlayerRepository;
 import repository.Repository;
-
 import java.util.UUID;
 
-import static config.HibernateConfig.buildSessionFactory;
 
 public class NewMatchService {
     private final Repository<Player, Long> playerRepository;
@@ -37,7 +36,7 @@ public class NewMatchService {
     }
 
     private Player executeTransaction(String playerName) {
-        Session session = buildSessionFactory().getCurrentSession();
+        Session session = HibernateConfig.getCurrentSession();
         try {
             session.beginTransaction();
             Player player = playerRepository.getByName(playerName, session)
