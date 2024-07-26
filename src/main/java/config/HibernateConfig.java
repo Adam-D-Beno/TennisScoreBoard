@@ -1,21 +1,35 @@
 package config;
 
-import lombok.Setter;
-import lombok.experimental.UtilityClass;
+import lombok.Getter;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-@UtilityClass
+
 public class HibernateConfig {
+    private static volatile HibernateConfig instance;
+    @Getter
+    private static final SessionFactory sessionFactory;
 
-
-    public Session getCurrentSession() {
-        return buildSessionFactory().getCurrentSession();
+    static {
+        sessionFactory = buildSessionFactory();
     }
 
-    private SessionFactory buildSessionFactory() {
+    private HibernateConfig() {
+    }
+
+    public static HibernateConfig getInstance() {
+        if (instance == null) {
+            synchronized (HibernateConfig.class) {
+                if (instance == null) {
+                    instance = new HibernateConfig();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private static SessionFactory buildSessionFactory() {
         try(SessionFactory sessionFactory = getConfiguration().buildSessionFactory()) {
             return sessionFactory;
         } catch (HibernateException e) {
@@ -23,7 +37,7 @@ public class HibernateConfig {
         }
     }
 
-    private Configuration getConfiguration() {
+    private static Configuration getConfiguration() {
         Configuration configuration = new Configuration();
         configuration.configure();
         return configuration;
