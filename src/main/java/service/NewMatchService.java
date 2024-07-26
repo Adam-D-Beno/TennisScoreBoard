@@ -36,7 +36,8 @@ public class NewMatchService {
     }
 
     private Player executeTransaction(String playerName) {
-        Session session = HibernateConfig.getCurrentSession();
+        Session session = HibernateConfig.getInstance()
+                .getSessionFactory().getCurrentSession();
         try {
             session.beginTransaction();
             Player player = playerRepository.getByName(playerName, session)
