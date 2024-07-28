@@ -18,7 +18,7 @@ public class NewMatchService {
         this.playerRepository = new PlayerRepository();
     }
 
-    public UUID CreateNewMatch(String firstPlayerName, String secondPlayerName) {
+    public UUID createNewMatch(String firstPlayerName, String secondPlayerName) {
 
         Match match = Match.builder()
                 .firstPlayer(getOrCreatePlayer(firstPlayerName))
@@ -26,7 +26,7 @@ public class NewMatchService {
                 .build();
 
         UUID uuid = getUUID();
-        MatchScoreModel.getINSTANCE().setNewMatch(uuid, match);
+        MatchScoreModel.getInstance().setMatch(uuid, match);
         return uuid;
     }
 
