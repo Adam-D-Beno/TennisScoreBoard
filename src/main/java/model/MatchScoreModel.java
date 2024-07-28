@@ -2,7 +2,7 @@ package model;
 
 import entity.Match;
 import lombok.*;
-import lombok.experimental.UtilityClass;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -11,16 +11,30 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MatchScoreModel {
 
-    private final Map<UUID, Match> matches = new HashMap<>();
+    private static Map<UUID, Match> matches;
 
-    @Getter
-    private static final MatchScoreModel INSTANCE  = new MatchScoreModel();
+    private static MatchScoreModel INSTANCE;
 
-    public Optional<Match> getNewMatch(UUID uuid) {
+    public static MatchScoreModel getInstance() {
+        if (INSTANCE == null) {
+            synchronized (MatchScoreModel.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new MatchScoreModel();
+                    matches =new HashMap<>();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+
+
+
+    public Optional<Match> getMatch(UUID uuid) {
         return Optional.ofNullable(matches.get(uuid));
     }
 
-    public void setNewMatch(UUID uuid, Match match) {
+    public void setMatch(UUID uuid, Match match) {
         matches.put(uuid, match);
     }
 
