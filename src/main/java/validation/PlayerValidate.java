@@ -1,11 +1,23 @@
 package validation;
 
-import entity.Player;
-import org.hibernate.Session;
+import org.h2.util.StringUtils;
 
 public class PlayerValidate {
+    private static final PlayerValidate INSTANCE = new PlayerValidate();
 
-    Player playerGetOrCreate(Long id, Session session) {
-        return null;
+    private PlayerValidate() {
     }
+
+    public boolean isEmptyOrNull(String str) {
+       return StringUtils.isNullOrEmpty(str);
+    }
+
+    public boolean isNumber(String number) {
+       return StringUtils.isNumber(number);
+    }
+
+    public static PlayerValidate getInstance() {
+        return INSTANCE;
+    }
+
 }
