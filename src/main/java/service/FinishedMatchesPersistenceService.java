@@ -2,10 +2,10 @@ package service;
 
 import config.HibernateConfig;
 import entity.Match;
+import model.MatchScoreModel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import repository.MatchRepository;
-import repository.PlayerRepository;
 
 public class FinishedMatchesPersistenceService {
     private final MatchRepository matchRepository;
@@ -38,6 +38,6 @@ public class FinishedMatchesPersistenceService {
     }
 
     private void deleteCurrentMatch(Match match) {
-
+        MatchScoreModel.getInstance().removeMatch(match);
     }
 }
