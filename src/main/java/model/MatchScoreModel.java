@@ -13,7 +13,7 @@ public class MatchScoreModel {
 
     private static Map<UUID, Match> matches;
 
-    private static MatchScoreModel INSTANCE;
+    private volatile static MatchScoreModel INSTANCE;
 
     public static MatchScoreModel getInstance() {
         if (INSTANCE == null) {
@@ -27,15 +27,13 @@ public class MatchScoreModel {
         return INSTANCE;
     }
 
-
-
-
     public Optional<Match> getMatch(UUID uuid) {
         return Optional.ofNullable(matches.get(uuid));
     }
 
-    public void setMatch(UUID uuid, Match match) {
+    public UUID setMatch(UUID uuid, Match match) {
         matches.put(uuid, match);
+        return uuid;
     }
 
 }
