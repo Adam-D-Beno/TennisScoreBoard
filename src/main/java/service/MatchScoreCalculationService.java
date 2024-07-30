@@ -2,26 +2,20 @@ package service;
 
 import entity.Match;
 import entity.Player;
-import model.MatchScoreModel;
-
-import javax.persistence.EntityNotFoundException;
-import java.util.UUID;
 
 public class MatchScoreCalculationService {
 
     public void scoringGames(Integer playerId, Match match) {
-        Player firstPlayer = match.getFirstPlayer();
-        Player secondPlayer = match.getSecondPlayer();
 
-        //todo validation exist in bd
-        if (firstPlayer.getId().equals(playerId)) {
-            checkIncreaseAddPoints(firstPlayer);
+        //todo validation exist in bd player
+        if (match.getFirstPlayer().getId().equals(playerId)) {
+            checkIncreaseAddPoints(match.getFirstPlayer());
         }
 
-        if (secondPlayer.getId().equals(playerId)) {
-            checkIncreaseAddPoints(secondPlayer);
+        if (match.getSecondPlayer().getId().equals(playerId)) {
+            checkIncreaseAddPoints(match.getSecondPlayer());
         }
-
+           finishGame(match);
     }
 
     private void checkIncreaseAddPoints(Player player) {
@@ -42,7 +36,17 @@ public class MatchScoreCalculationService {
 
     private void checkIncreaseAddSets(Player player) {
         player.addSets();
+    }
 
+    private void finishGame(Match match) {
 
+        if (match.getFirstPlayer().getSets() - match.getSecondPlayer().getSets() >= 2) {
+            match.setWinner(match.getFirstPlayer());
+            match.setGameEnd(true);
+        }
+        if (match.getFirstPlayer().getSets() - match.getSecondPlayer().getSets() <= 2) {
+             match.setWinner(match.getSecondPlayer());
+             match.setGameEnd(true);
+        }
     }
 }
