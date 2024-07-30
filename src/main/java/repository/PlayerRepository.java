@@ -11,9 +11,9 @@ import java.util.Optional;
 public class PlayerRepository implements Repository<Player, Long> {
 
     @Override
-    public Player save(Player player, Session session) {
+    public Optional<Player> save(Player player, Session session) {
         session.save(player);
-        return player;
+        return Optional.ofNullable(player);
     }
 
     @Override
@@ -22,8 +22,10 @@ public class PlayerRepository implements Repository<Player, Long> {
     }
 
     @Override
-    public List<Player> getAllGames(Session session) {
-        return session.createQuery("select p from Player p", Player.class).getResultList();
+    public Optional<List<Player>> getAllGames(Session session) {
+        return Optional.ofNullable(
+                session.createQuery("select p from Player p", Player.class).getResultList()
+        );
     }
 
     @Override
