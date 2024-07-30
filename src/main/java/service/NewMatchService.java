@@ -26,7 +26,7 @@ public class NewMatchService {
                 .uuid(getUUID())
                 .build();
 
-        return MatchScoreModel.getInstance().setMatch(match.getUuid(), match);
+        return MatchScoreModel.getInstance().setMatch(match);
     }
 
     private Player getOrCreatePlayer(String playerName) {
