@@ -31,9 +31,13 @@ public class MatchScoreModel {
         return Optional.ofNullable(matches.get(uuid));
     }
 
-    public UUID setMatch(UUID uuid, Match match) {
-        matches.put(uuid, match);
-        return uuid;
+    public UUID setMatch(Match match) {
+        matches.put(match.getUuid(), match);
+        return match.getUuid();
+    }
+
+    public boolean removeMatch(Match match) {
+       return matches.remove(match.getUuid(), match);
     }
 
 }
