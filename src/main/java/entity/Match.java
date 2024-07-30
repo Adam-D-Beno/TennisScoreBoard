@@ -1,18 +1,16 @@
 package entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @NoArgsConstructor
-@Entity
-@Table(name = "matches")
 @AllArgsConstructor
 @Builder
+@Getter
+@Entity
+@Table(name = "matches")
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +26,7 @@ public class Match {
 
     @ManyToOne
     @JoinColumn(name = "playerWinId")
+    @Setter
     private Player winner;
-
-    @Transient
-    private int points;
-
-    @Transient
-    private int games;
-
-    @Transient
-    private int sets;
 
 }
