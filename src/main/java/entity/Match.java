@@ -29,4 +29,9 @@ public class Match {
     @Setter
     private Player winner;
 
+    @Setter
+    @Getter
+    @Transient
+    private boolean gameEnd;
+
 }
