@@ -23,9 +23,10 @@ public class NewMatchService {
         Match match = Match.builder()
                 .firstPlayer(getOrCreatePlayer(firstPlayerName))
                 .secondPlayer(getOrCreatePlayer(secondPlayerName))
+                .uuid(getUUID())
                 .build();
 
-        return MatchScoreModel.getInstance().setMatch(getUUID(), match);
+        return MatchScoreModel.getInstance().setMatch(match.getUuid(), match);
     }
 
     private Player getOrCreatePlayer(String playerName) {
@@ -34,6 +35,7 @@ public class NewMatchService {
     }
 
     private Player executeTransaction(String playerName) {
+
         Session session = HibernateConfig.getInstance()
                 .getSessionFactory().getCurrentSession();
         try {
