@@ -40,7 +40,7 @@ public class NewMatchService {
             session.beginTransaction();
             Player player = playerRepository.getByName(playerName, session)
                     .orElseGet(
-                            () -> playerRepository.save(Player.builder().name(playerName).build(), session)
+                            () -> playerRepository.save(Player.builder().name(playerName).build(), session).get()
                     );
             session.getTransaction().commit();
             return player;
