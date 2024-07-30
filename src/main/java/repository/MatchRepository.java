@@ -10,9 +10,9 @@ import java.util.Optional;
 public class MatchRepository implements Repository<Match, Long> {
 
     @Override
-    public Match save(Match match, Session session) {
+    public Optional<Match> save(Match match, Session session) {
         session.save(match);
-        return match;
+        return Optional.ofNullable(match);
     }
 
     @Override
@@ -21,8 +21,8 @@ public class MatchRepository implements Repository<Match, Long> {
     }
 
     @Override
-    public List<Match> getAllGames(Session session) {
-        return null;
+    public Optional<List<Match>> getAllGames(Session session) {
+        return Optional.empty();
     }
 
     @Override
