@@ -2,6 +2,8 @@ package validation;
 
 import org.h2.util.StringUtils;
 
+import java.util.stream.Stream;
+
 public class PlayerValidate {
     private static final PlayerValidate INSTANCE = new PlayerValidate();
 
