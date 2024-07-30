@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface Repository<E, K extends Serializable>{
 
-    E save (E entity, Session session);
+    Optional<E> save (E entity, Session session);
     Optional<E> getById(K id, Session session);
-    List<E> getAllGames(Session session);
+    Optional<List<E>> getAllGames(Session session);
     Optional<E> getByName(String name, Session session);
 }
