@@ -48,6 +48,5 @@ public class MatchScoreCalculationService {
              match.setWinner(match.getSecondPlayer());
              match.setGameEnd(true);
         }
-
     }
 }
