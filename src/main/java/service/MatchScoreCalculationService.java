@@ -21,7 +21,7 @@ public class MatchScoreCalculationService {
     private void checkIncreaseAddPoints(Player player) {
         player.addPoint();
 
-        if (player.getPoints() >= 40) {
+        if (player.getPoints() > 40) {
             checkIncreaseAddGames(player);
         }
     }
