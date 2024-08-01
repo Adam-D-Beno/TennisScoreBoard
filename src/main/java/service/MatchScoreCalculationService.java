@@ -19,7 +19,7 @@ public class MatchScoreCalculationService {
     }
 
     private void checkIncreaseAddPoints(Player player) {
-        player.addPoints();
+        player.addPoint();
 
         if (player.getPoints() >= 40) {
             checkIncreaseAddGames(player);
@@ -27,7 +27,7 @@ public class MatchScoreCalculationService {
     }
 
     private void checkIncreaseAddGames(Player player) {
-        player.addGames();
+        player.addGame();
 
         if (player.getGames() >= 6) {
             checkIncreaseAddSets(player);
@@ -35,7 +35,7 @@ public class MatchScoreCalculationService {
     }
 
     private void checkIncreaseAddSets(Player player) {
-        player.addSets();
+        player.addSet();
     }
 
     private void finishGame(Match match) {
@@ -48,5 +48,6 @@ public class MatchScoreCalculationService {
              match.setWinner(match.getSecondPlayer());
              match.setGameEnd(true);
         }
+
     }
 }
