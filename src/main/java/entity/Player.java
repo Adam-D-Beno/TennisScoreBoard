@@ -3,8 +3,6 @@ package entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.function.Supplier;
 
 @Getter
 @NoArgsConstructor
@@ -32,15 +30,15 @@ public class Player {
     @Setter(AccessLevel.PRIVATE)
     private int sets;
 
-    public void addPoints() {
+    public void addPoint() {
         this.points += 15;
     }
 
-    public void addGames() {
+    public void addGame() {
         this.games += 1;
     }
 
-    public void addSets() {
+    public void addSet() {
         this.sets += 1;
     }
 }
