@@ -1,22 +1,25 @@
 package service;
 
 import config.HibernateConfig;
-import entity.Match;
-import model.MatchScoreModel;
+import model.Match;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import repository.MatchRepository;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.UUID;
+
 public class FinishedMatchesPersistenceService {
     private final MatchRepository matchRepository;
+    private final OngoingMatchesService ongoingMatchesService;
 
     public FinishedMatchesPersistenceService() {
-        matchRepository = new MatchRepository();
+        this.matchRepository = new MatchRepository();
+        this. ongoingMatchesService = new OngoingMatchesService();
     }
 
-    public void save(Match match) {
-        executionTransaction(match);
-        deleteCurrentMatch(match);
+    public void save(UUID matchId) {
+        executionTransaction(toMatch(matchId));
     }
 
     private void executionTransaction(Match match) {
@@ -37,7 +40,13 @@ public class FinishedMatchesPersistenceService {
         }
     }
 
-    private void deleteCurrentMatch(Match match) {
-        MatchScoreModel.getInstance().removeMatch(match);
+    private Match toMatch(UUID matchId) {
+        return ongoingMatchesService.getMatchScores(matchId).map(
+                (matchScore -> Match.builder()
+                        .firstPlayer(matchScore.getFirstPlayer())
+                        .secondPlayer(matchScore.getSecondPlayer())
+                        .winner(matchScore.getWinner())
+                        .build())
+        ).orElseThrow(() -> new EntityNotFoundException("Object match is not found in scoreModel"));
     }
 }
