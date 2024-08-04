@@ -1,14 +1,13 @@
 package repository;
 
-import config.HibernateConfig;
-import entity.Player;
+import model.Player;
 import lombok.NoArgsConstructor;
 import org.hibernate.Session;
 import java.util.List;
 import java.util.Optional;
 
 @NoArgsConstructor
-public class PlayerRepository implements Repository<Player, Long> {
+public class PlayerRepository implements Repository<Player, Integer> {
 
     @Override
     public Optional<Player> save(Player player, Session session) {
@@ -17,7 +16,7 @@ public class PlayerRepository implements Repository<Player, Long> {
     }
 
     @Override
-    public Optional<Player> getById(Long id, Session session ) {
+    public Optional<Player> getById(Integer id, Session session ) {
         return Optional.ofNullable(session.get(Player.class, id));
     }
 

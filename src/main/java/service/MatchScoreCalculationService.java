@@ -1,44 +1,49 @@
 package service;
 
-import entity.Match;
-import entity.Player;
+import model.Match;
+import model.MatchScore;
+import model.Player;
+import java.util.Objects;
+import java.util.UUID;
+
+import static util.PointNumberWon.*;
 
 public class MatchScoreCalculationService {
 
-    public void scoringGames(Integer playerId, Match match) {
+    public void scoringGames(Integer playerId, UUID matchId) {
 
         //todo validation exist in bd player
         if (match.getFirstPlayer().getId().equals(playerId)) {
-            checkIncreaseAddPoints(match.getFirstPlayer());
+            increasePoints(match.getFirstPlayer());
+            checkPoints(match.getFirstPlayer());
         }
 
         if (match.getSecondPlayer().getId().equals(playerId)) {
-            checkIncreaseAddPoints(match.getSecondPlayer());
+            checkPoints(match.getSecondPlayer());
         }
            finishGame(match);
     }
 
-    private void checkIncreaseAddPoints(Player player) {
-        player.addPoint();
+    private void checkPoints(Player player) {
 
         if (player.getPoints() > 40) {
-            checkIncreaseAddGames(player);
+            checkGames(player);
         }
     }
 
-    private void checkIncreaseAddGames(Player player) {
-        player.addGame();
+    private void checkGames(Player player) {
+        increaseGames(player);
 
         if (player.getGames() >= 6) {
-            checkIncreaseAddSets(player);
+            checkSets(player);
         }
     }
 
-    private void checkIncreaseAddSets(Player player) {
-        player.addSet();
+    private void checkSets(Player player) {
+        increaseSets(player);
     }
 
-    private void finishGame(Match match) {
+    private void finishGame(MatchScore match) {
 
         if (match.getFirstPlayer().getSets() - match.getSecondPlayer().getSets() >= 2) {
             match.setWinner(match.getFirstPlayer());
@@ -48,5 +53,35 @@ public class MatchScoreCalculationService {
              match.setWinner(match.getSecondPlayer());
              match.setGameEnd(true);
         }
+    }
+
+    private void increasePoints(Player player) {
+        if (Objects.isNull(player.getPointNumberWon())) {
+            player.setPointNumberWon(FIRST_POINT);
+            player.setPoints(FIRST_POINT.getNumberWon());
+        }
+
+        player.setPointNumberWon(player.getPointNumberWon());
+
+        if (player.getPointNumberWon().equals(SECOND_POINT)) {
+            player.setPointNumberWon(SECOND_POINT);
+            player.setPoints(SECOND_POINT.getNumberWon());
+        }
+        if (player.getPointNumberWon().equals(THIRD_POINT)) {
+            player.setPointNumberWon(THIRD_POINT);
+            player.setPoints(THIRD_POINT.getNumberWon());
+        }
+    }
+
+    private void increaseGames(Player player) {
+        player.setGames(1);
+    }
+
+    private void increaseSets(Player player) {
+        player.setSets(1);
+    }
+
+    private void tieBreak() {
+
     }
 }

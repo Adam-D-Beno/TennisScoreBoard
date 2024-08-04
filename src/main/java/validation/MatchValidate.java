@@ -1,6 +1,6 @@
 package validation;
 
-import entity.Match;
+import model.Match;
 
 public class MatchValidate {
     private final static MatchValidate INSTANCE = new MatchValidate();

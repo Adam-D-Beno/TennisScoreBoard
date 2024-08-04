@@ -1,32 +1,36 @@
 package service;
 
 import config.HibernateConfig;
-import entity.Match;
-import entity.Player;
-import model.MatchScoreModel;
+import model.MatchScore;
+import model.Player;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import repository.PlayerRepository;
 import repository.Repository;
+
+import java.util.Optional;
 import java.util.UUID;
 
 
 public class NewMatchService {
-    private final Repository<Player, Long> playerRepository;
+
+    private final Repository<Player, Integer> playerRepository;
+    private final OngoingMatchesService ongoingMatchesService;
 
     public NewMatchService() {
         this.playerRepository = new PlayerRepository();
+        this.ongoingMatchesService = new OngoingMatchesService();
     }
 
-    public UUID createNewMatch(String firstPlayerName, String secondPlayerName) {
+    public Optional<UUID> createNewMatchScores(String firstPlayerName, String secondPlayerName) {
 
-        Match match = Match.builder()
+        MatchScore matchScore = MatchScore.builder()
                 .firstPlayer(getOrCreatePlayer(firstPlayerName))
                 .secondPlayer(getOrCreatePlayer(secondPlayerName))
                 .uuid(getUUID())
                 .build();
 
-        return MatchScoreModel.getInstance().setMatch(match);
+        return ongoingMatchesService.setMatchScores(matchScore);
     }
 
     private Player getOrCreatePlayer(String playerName) {

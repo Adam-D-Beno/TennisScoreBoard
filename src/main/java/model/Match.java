@@ -1,9 +1,8 @@
-package entity;
+package model;
 
 import lombok.*;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -17,10 +16,6 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Setter
-    @Transient
-    private UUID uuid;
-
     @ManyToOne
     @JoinColumn(name = "firstPlayerId")
     private Player firstPlayer;
@@ -33,10 +28,5 @@ public class Match {
     @JoinColumn(name = "playerWinId")
     @Setter
     private Player winner;
-
-    @Setter
-    @Getter
-    @Transient
-    private boolean gameEnd;
 
 }

@@ -1,10 +1,12 @@
-package entity;
+package model;
 
 import lombok.*;
+import util.PointNumberWon;
 
 import javax.persistence.*;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -18,27 +20,4 @@ public class Player {
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @Transient
-    @Setter(AccessLevel.PRIVATE)
-    private int points;
-
-    @Transient
-    @Setter(AccessLevel.PRIVATE)
-    private int games;
-
-    @Transient
-    @Setter(AccessLevel.PRIVATE)
-    private int sets;
-
-    public void addPoint() {
-        this.points += 15;
-    }
-
-    public void addGame() {
-        this.games += 1;
-    }
-
-    public void addSet() {
-        this.sets += 1;
-    }
 }
