@@ -28,5 +28,4 @@ public class Match {
     @JoinColumn(name = "playerWinId")
     @Setter
     private Player winner;
-
 }
