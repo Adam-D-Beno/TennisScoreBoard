@@ -19,5 +19,4 @@ public class Player {
     private Integer id;
     @Column(name = "name", unique = true, nullable = false)
     private String name;
-
 }
