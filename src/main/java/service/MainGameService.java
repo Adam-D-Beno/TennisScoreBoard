@@ -14,11 +14,8 @@ public class MainGameService {
     }
 
     public void beginGame(Integer playerId, UUID matchId) {
-        matchScoreCalculationService.scoringGames(playerId, matchId);
+        matchScoreCalculationService.ScoreCalculation(playerId, matchId);
         finishedMatchesPersistenceService.save(matchId);
         ongoingMatchesService.removeMatchScores(matchId);
     }
-
-
-
 }
