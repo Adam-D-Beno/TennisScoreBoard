@@ -12,34 +12,31 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public class NewMatchService {
+public class GenerationMatchService {
 
     private final Repository<Player, Integer> playerRepository;
     private final OngoingMatchesService ongoingMatchesService;
 
-    public NewMatchService() {
+    public GenerationMatchService() {
         this.playerRepository = new PlayerRepository();
         this.ongoingMatchesService = new OngoingMatchesService();
     }
 
     public Optional<UUID> createNewMatchScores(String firstPlayerName, String secondPlayerName) {
-
         MatchScore matchScore = MatchScore.builder()
                 .firstPlayer(getOrCreatePlayer(firstPlayerName))
                 .secondPlayer(getOrCreatePlayer(secondPlayerName))
-                .uuid(getUUID())
+                .uuid(getRandomUUID())
                 .build();
 
         return ongoingMatchesService.setMatchScores(matchScore);
     }
 
     private Player getOrCreatePlayer(String playerName) {
-
         return executeTransaction(playerName);
     }
 
     private Player executeTransaction(String playerName) {
-
         Session session = HibernateConfig.getInstance()
                 .getSessionFactory().getCurrentSession();
         try {
@@ -58,7 +55,7 @@ public class NewMatchService {
         }
     }
 
-    private UUID getUUID() {
+    private UUID getRandomUUID() {
         return UUID.randomUUID();
     }
 }
