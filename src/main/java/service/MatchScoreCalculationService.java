@@ -1,87 +1,227 @@
 package service;
 
-import model.Match;
 import model.MatchScore;
 import model.Player;
-import java.util.Objects;
+
+import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
-import static util.PointNumberWon.*;
-
 public class MatchScoreCalculationService {
+    private final OngoingMatchesService ongoingMatchesService;
 
-    public void scoringGames(Integer playerId, UUID matchId) {
+    public MatchScoreCalculationService() {
+        ongoingMatchesService = new OngoingMatchesService();
+    }
 
+
+    public void ScoreCalculation(int playerId, UUID matchId) {
+
+        MatchScore matchScore = ongoingMatchesService.getMatchScores(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Object match is not found in scoreModel"));
         //todo validation exist in bd player
-        if (match.getFirstPlayer().getId().equals(playerId)) {
-            increasePoints(match.getFirstPlayer());
-            checkPoints(match.getFirstPlayer());
-        }
+        //todo validation exist in MatchScore player
 
-        if (match.getSecondPlayer().getId().equals(playerId)) {
-            checkPoints(match.getSecondPlayer());
-        }
-           finishGame(match);
+        scorePoints(matchScore, playerId);
+        scoreGames(matchScore, playerId);
+        scoreSets(matchScore, playerId);
+
     }
 
-    private void checkPoints(Player player) {
-
-        if (player.getPoints() > 40) {
-            checkGames(player);
-        }
+    private void scorePoints(MatchScore matchScore, int winPlayerId) {
+        winPoint(matchScore, winPlayerId);
+        scoreDeuce(matchScore);
     }
 
-    private void checkGames(Player player) {
-        increaseGames(player);
-
-        if (player.getGames() >= 6) {
-            checkSets(player);
+    private void scoreGames(MatchScore matchScore, int winPlayerId) {
+        if (matchScore.isDeuce()) {
+            increaseAd(matchScore, winPlayerId);
+            getPlayerIdWinDeuce(matchScore);
+        } else {
+            winGame(matchScore);
         }
+
     }
 
-    private void checkSets(Player player) {
-        increaseSets(player);
-    }
-
-    private void finishGame(MatchScore match) {
-
-        if (match.getFirstPlayer().getSets() - match.getSecondPlayer().getSets() >= 2) {
-            match.setWinner(match.getFirstPlayer());
-            match.setGameEnd(true);
-        }
-        if (match.getFirstPlayer().getSets() - match.getSecondPlayer().getSets() <= 2) {
-             match.setWinner(match.getSecondPlayer());
-             match.setGameEnd(true);
+    private void scoreSets(MatchScore matchScore, int winPlayerId) {
+        if (matchScore.isTieBreak()) {
+            increaseTieBreak(matchScore, winPlayerId);
+            getPlayerIdWinTieBreak(matchScore);
+        } else {
+//            winSets(matchScore);
+            scoreTieBreak(matchScore);
         }
     }
 
-    private void increasePoints(Player player) {
-        if (Objects.isNull(player.getPointNumberWon())) {
-            player.setPointNumberWon(FIRST_POINT);
-            player.setPoints(FIRST_POINT.getNumberWon());
-        }
+    private void winPoint(MatchScore matchScore, int winPlayerId) {
+        increasePoints(matchScore, winPlayerId);
+    }
 
-        player.setPointNumberWon(player.getPointNumberWon());
+    private void winGame(MatchScore matchScore) {
+        increaseGames(matchScore, getPlayerIdWinGameFourPointsScoredRowInGame(matchScore));
+        increaseGames(matchScore, getPlayerIdWinGameDecisivePoint(matchScore));
+        increaseGames(matchScore, getPlayerIdWinDeuce(matchScore));
+    }
 
-        if (player.getPointNumberWon().equals(SECOND_POINT)) {
-            player.setPointNumberWon(SECOND_POINT);
-            player.setPoints(SECOND_POINT.getNumberWon());
+    private void winSets(MatchScore matchScore, int winPlayerId) {
+        increaseSets(matchScore, winPlayerId);
+        if (matchScore.getFirstPlayerSets() == 2) {
+            finishGame(matchScore);
+            return;
         }
-        if (player.getPointNumberWon().equals(THIRD_POINT)) {
-            player.setPointNumberWon(THIRD_POINT);
-            player.setPoints(THIRD_POINT.getNumberWon());
+        if (matchScore.getSecondPlayerSets() == 2) {
+            matchScore.setMathEnd(true);
+            finishGame(matchScore);
+            return;
         }
     }
 
-    private void increaseGames(Player player) {
-        player.setGames(1);
+    private void increasePoints(MatchScore matchScore, int winPlayerId) {
+
+        if (matchScore.getFirstPlayer().getId() == winPlayerId) {
+            int point = matchScore.getFirstPlayerPoints();
+            if (point < 30) {
+                matchScore.setFirstPlayerPoints(point + 15);
+                return;
+            }
+            if (point == 30) {
+                matchScore.setFirstPlayerPoints(point + 10);
+                return;
+            }
+            if (point == 40) {
+                matchScore.setFirstPlayerPoints(point + 1);
+                return;
+            }
+        }
+        if (matchScore.getSecondPlayer().getId() == winPlayerId) {
+            int point = matchScore.getSecondPlayerPoints();
+            if (point < 30) {
+                matchScore.setSecondPlayerPoints(point + 15);
+                return;
+            }
+            if (point == 30) {
+                matchScore.setSecondPlayerPoints(point + 10);
+                return;
+            }
+            if (point == 40) {
+                matchScore.setSecondPlayerPoints(point + 1);
+                return;
+            }
+        }
     }
 
-    private void increaseSets(Player player) {
-        player.setSets(1);
+    private void increaseGames(MatchScore matchScore, int winPlayerId) {
+        int games;
+        if (matchScore.getFirstPlayer().getId() == winPlayerId) {
+            games = matchScore.getFirstPlayerGames();
+            matchScore.setFirstPlayerGames(games + 1);
+            return;
+        }
+        if (matchScore.getSecondPlayer().getId() == winPlayerId) {
+            games = matchScore.getSecondPlayerGames();
+            matchScore.setSecondPlayerGames(games + 1);
+            return;
+        }
     }
 
-    private void tieBreak() {
+    private void increaseSets(MatchScore matchScore, int winPlayerId) {
+        int sets;
+        if (matchScore.getFirstPlayer().getId() == winPlayerId) {
+            sets = matchScore.getFirstPlayerSets();
+            matchScore.setFirstPlayerSets(sets + 1);
+            return;
+        }
+        if (matchScore.getSecondPlayer().getId() == winPlayerId) {
+            sets = matchScore.getSecondPlayerSets();
+            matchScore.setSecondPlayerSets(sets + 1);
+            return;
+        }
+    }
 
+    private void increaseAd(MatchScore matchScore, int winPlayerId) {
+        if (matchScore.getFirstPlayer().getId() == winPlayerId) {
+            matchScore.setAdSecondPlayer(matchScore.getAdFirstPlayer() + 1);
+        }
+        if (matchScore.getSecondPlayer().getId() == winPlayerId) {
+            matchScore.setAdSecondPlayer(matchScore.getAdFirstPlayer() + 1);
+        }
+    }
+
+    private void increaseTieBreak(MatchScore matchScore, int winPlayerId) {
+        if (matchScore.getFirstPlayer().getId() == winPlayerId) {
+            matchScore.setTieBreakFirstPlayer(matchScore.getTieBreakFirstPlayer() + 1);
+        }
+        if (matchScore.getSecondPlayer().getId() == winPlayerId) {
+            matchScore.setTieBreakSecondPlayer(matchScore.getTieBreakSecondPlayer() + 1);
+        }
+    }
+
+    private void finishGame(MatchScore matchScore) {
+        matchScore.setMathEnd(true);
+    }
+
+    private void scoreDeuce(MatchScore matchScore) {
+        if (matchScore.getFirstPlayerPoints() == 40 && matchScore.getSecondPlayerPoints() == 40) {
+            matchScore.setDeuce(true);
+        }
+    }
+
+    private void scoreTieBreak(MatchScore matchScore) {
+        if (matchScore.getFirstPlayerGames() == 6 && matchScore.getSecondPlayerGames() == 6) {
+            matchScore.setTieBreak(true);
+        }
+    }
+
+    private int getPlayerIdWinGameFourPointsScoredRowInGame(MatchScore matchScore) {
+        if (matchScore.getFirstPlayerPoints() == 40 && matchScore.getSecondPlayerPoints() == 0) {
+            matchScore.setFirstPlayerPoints(0);
+            return matchScore.getFirstPlayer().getId();
+        }
+        if (matchScore.getSecondPlayerPoints() == 40 && matchScore.getFirstPlayerPoints() == 0) {
+            matchScore.setSecondPlayerPoints(0);
+            return matchScore.getSecondPlayer().getId();
+        }
+        return -1;
+    }
+
+    private int getPlayerIdWinGameDecisivePoint(MatchScore matchScore) {
+        if (matchScore.getFirstPlayerPoints() == 41) {
+            matchScore.setFirstPlayerPoints(0);
+            return matchScore.getFirstPlayer().getId();
+        }
+        if (matchScore.getSecondPlayerPoints() == 41) {
+            matchScore.setSecondPlayerPoints(0);
+            return matchScore.getSecondPlayer().getId();
+        }
+        return -1;
+    }
+
+    private int getPlayerIdWinDeuce(MatchScore matchScore) {
+        if (matchScore.getAdFirstPlayer() - matchScore.getAdSecondPlayer() >= 2) {
+            matchScore.setAdFirstPlayer(0);
+            matchScore.setDeuce(false);
+            return matchScore.getFirstPlayer().getId();
+        }
+        if (matchScore.getAdSecondPlayer() - matchScore.getAdFirstPlayer() <= -2) {
+            matchScore.setAdSecondPlayer(0);
+            matchScore.setDeuce(false);
+            return matchScore.getSecondPlayer().getId();
+        }
+        return -1;
+    }
+
+    private int getPlayerIdWinTieBreak(MatchScore matchScore) {
+        if (matchScore.getTieBreakFirstPlayer() >= 7 || matchScore.getTieBreakSecondPlayer() >= 7) {
+            if (matchScore.getTieBreakFirstPlayer() - matchScore.getTieBreakSecondPlayer() >= 2) {
+                matchScore.setTieBreakFirstPlayer(0);
+                matchScore.setTieBreak(false);
+                return matchScore.getFirstPlayer().getId();
+            }
+            if (matchScore.getTieBreakSecondPlayer() - matchScore.getTieBreakFirstPlayer() <= -2) {
+                matchScore.setTieBreakSecondPlayer(0);
+                matchScore.setTieBreak(false);
+                return matchScore.getSecondPlayer().getId();
+            }
+        }
+        return -1;
     }
 }
