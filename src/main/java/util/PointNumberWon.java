@@ -8,13 +8,13 @@ public enum PointNumberWon {
     THIRD_POINT(40),
     FOURTH_POINT(0);
 
-    private final int numberWon;
+    private final int pointWon;
 
-    PointNumberWon(int numberWon) {
-        this.numberWon = numberWon;
+    PointNumberWon(int pointWon) {
+        this.pointWon = pointWon;
     }
 
-    public PointNumberWon getNextDay() {
+    public PointNumberWon getNextPoint() {
         int currentIndex = this.ordinal();
         int nextIndex = (currentIndex + 1) % PointNumberWon.values().length;
         return PointNumberWon.values()[nextIndex];
