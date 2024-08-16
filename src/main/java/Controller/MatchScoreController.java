@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.MainGameService;
 import service.OngoingMatchesService;
+import validation.MatchValidate;
 import validation.PlayerValidate;
 import java.io.IOException;
 import java.util.UUID;
@@ -16,6 +17,7 @@ public class MatchScoreController extends HttpServlet {
 
     private final MainGameService mainGameService;
     private final PlayerValidate playerValidate = PlayerValidate.getInstance();
+    private final MatchValidate matchValidate = MatchValidate.getInstance();
 
 
     public MatchScoreController() {
@@ -29,9 +31,10 @@ public class MatchScoreController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer playerId = getPlayerId(req);
+        int playerId = getPlayerId(req);
         UUID matchId = getMatchId(req);
         mainGameService.beginGame(playerId, matchId);
+        doGet(req, resp);
     }
 
     private Integer getPlayerId(HttpServletRequest req) {
@@ -46,7 +49,7 @@ public class MatchScoreController extends HttpServlet {
 
     private UUID getMatchId(HttpServletRequest req) {
         //todo chance on match validate
-       if (playerValidate.isEmptyOrNull(req.getParameter("uuid"))) {
+       if (matchValidate.isEmptyOrNull(req.getParameter("uuid"))) {
            throw new IllegalArgumentException("UUID is empty or null");
         }
         return UUID.nameUUIDFromBytes(req.getParameter("uuid").getBytes());
