@@ -1,7 +1,7 @@
 package model;
 
 import lombok.*;
-import util.PointNumberWon;
+
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -25,8 +25,29 @@ public class MatchScore {
     private int adSecondPlayer;
     private int tieBreakFirstPlayer;
     private int tieBreakSecondPlayer;
-    private boolean isMathEnd;
+    private boolean isMatchEnd;
     private boolean isTieBreak;
     private boolean isDeuce;
+
+
+    public void clearPoints() {
+        firstPlayerPoints = 0;
+        secondPlayerPoints = 0;
+    }
+
+    public void clearGames() {
+        firstPlayerGames = 0;
+        secondPlayerGames = 0;
+    }
+
+    public void clearAd() {
+        adFirstPlayer = 0;
+        adSecondPlayer = 0;
+    }
+
+    public void clearTieBreak() {
+        tieBreakFirstPlayer = 0;
+        tieBreakSecondPlayer = 0;
+    }
 
 }
