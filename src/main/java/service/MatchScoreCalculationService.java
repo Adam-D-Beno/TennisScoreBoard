@@ -52,10 +52,12 @@ public class MatchScoreCalculationService {
 
     private void finishGame(MatchScore matchScore) {
         if (matchScore.getFirstPlayerSets() == 2) {
+            matchScore.setWinner(matchScore.getFirstPlayer());
             matchScore.setMatchEnd(true);
             return;
         }
         if (matchScore.getSecondPlayerSets() == 2) {
+            matchScore.setWinner(matchScore.getSecondPlayer());
             matchScore.setMatchEnd(true);
             return;
         }
