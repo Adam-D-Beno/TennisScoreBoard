@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.GenerationMatchService;
+import service.MainGameService;
 import validation.PlayerValidate;
 
 import java.io.IOException;
@@ -14,19 +15,18 @@ import java.util.UUID;
 @WebServlet(name = "new-match", urlPatterns = "/new-match")
 public class NewMatchController extends HttpServlet {
 
-    private final GenerationMatchService generationMatchService;
+    private final MainGameService mainGameService;
     private final PlayerValidate playerValidate = PlayerValidate.getInstance();
 
     public NewMatchController() {
-        this.generationMatchService = new GenerationMatchService();
+        this.mainGameService = new MainGameService();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String firstPlayerName = getPlayerName(req, "player1");
         String secondPlayerName = getPlayerName(req, "player2");
-        UUID match_id = generationMatchService.createNewMatchScores(firstPlayerName, secondPlayerName)
-                .orElseThrow(() -> new IllegalArgumentException("UUID is not found"));
+        UUID match_id = mainGameService.generationMatchService(firstPlayerName, secondPlayerName);
         resp.sendRedirect("/match-score?uuid=$" + match_id);
     }
 
