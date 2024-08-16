@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.MatchScore;
 import service.MainGameService;
 import service.OngoingMatchesService;
 import validation.MatchValidate;
@@ -34,6 +35,7 @@ public class MatchScoreController extends HttpServlet {
         int playerId = getPlayerId(req);
         UUID matchId = getMatchId(req);
         mainGameService.beginGame(playerId, matchId);
+        req.setAttribute("matchScore", mainGameService.getMatchScore(matchId));
         doGet(req, resp);
     }
 
