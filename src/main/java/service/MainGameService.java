@@ -2,6 +2,7 @@ package service;
 
 import model.MatchScore;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.UUID;
 
 public class MainGameService {
@@ -32,4 +33,8 @@ public class MainGameService {
                 .orElseThrow(() -> new IllegalArgumentException("UUID is not found"));
     }
 
+    public MatchScore getMatchScore(UUID matchId) {
+        return ongoingMatchesService.getMatchScores(matchId)
+                .orElseThrow(() -> new EntityNotFoundException("Object match is not found in scoreModel"));
+    }
 }
