@@ -28,7 +28,6 @@ public class NewMatchController extends HttpServlet {
         UUID match_id = generationMatchService.createNewMatchScores(firstPlayerName, secondPlayerName)
                 .orElseThrow(() -> new IllegalArgumentException("UUID is not found"));
         resp.sendRedirect("/match-score?uuid=$" + match_id);
-
     }
 
     private String getPlayerName(HttpServletRequest req, String playerName) {
