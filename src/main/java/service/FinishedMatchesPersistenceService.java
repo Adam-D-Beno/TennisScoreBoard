@@ -13,9 +13,9 @@ public class FinishedMatchesPersistenceService {
     private final MatchRepository matchRepository;
     private final OngoingMatchesService ongoingMatchesService;
 
-    public FinishedMatchesPersistenceService() {
+    public FinishedMatchesPersistenceService(OngoingMatchesService ongoingMatchesService) {
         this.matchRepository = new MatchRepository();
-        this. ongoingMatchesService = new OngoingMatchesService();
+        this.ongoingMatchesService = ongoingMatchesService;
     }
 
     public void save(UUID matchId) {
