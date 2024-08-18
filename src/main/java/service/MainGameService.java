@@ -12,10 +12,10 @@ public class MainGameService {
     private final GenerationMatchService generationMatchService;
 
     public MainGameService() {
-        this.matchScoreCalculationService = new MatchScoreCalculationService();
-        this.finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
         this.ongoingMatchesService = new OngoingMatchesService();
-        this.generationMatchService = new GenerationMatchService();
+        this.matchScoreCalculationService = new MatchScoreCalculationService(ongoingMatchesService);
+        this.finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(ongoingMatchesService);
+        this.generationMatchService = new GenerationMatchService(ongoingMatchesService);
     }
 
     public void beginGame(Integer playerId, UUID matchId) {
