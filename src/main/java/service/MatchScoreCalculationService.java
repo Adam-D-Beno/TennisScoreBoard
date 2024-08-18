@@ -8,8 +8,8 @@ import java.util.UUID;
 public class MatchScoreCalculationService {
     private final OngoingMatchesService ongoingMatchesService;
 
-    public MatchScoreCalculationService() {
-        ongoingMatchesService = new OngoingMatchesService();
+    public MatchScoreCalculationService(OngoingMatchesService ongoingMatchesService) {
+        this.ongoingMatchesService = ongoingMatchesService;
     }
 
 
