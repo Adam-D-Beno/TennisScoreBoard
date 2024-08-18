@@ -14,15 +14,13 @@ public class OngoingMatchesService {
         this.matchScores = new ConcurrentHashMap<>();
     }
 
-    public void ongoingGame() {
-    }
-
     public Optional<MatchScore> getMatchScores(UUID uuid) {
         return Optional.ofNullable(matchScores.get(uuid));
     }
 
-    public Optional<UUID> setMatchScores(MatchScore match) {
-        return Optional.ofNullable(matchScores.put(match.getUuid(), match).getUuid());
+    public Optional<UUID> setMatchScores(MatchScore matchScore) {
+        matchScores.put(matchScore.getUuid(), matchScore);
+        return Optional.ofNullable(matchScore.getUuid());
     }
 
     public void removeMatchScores(UUID matchId) {
