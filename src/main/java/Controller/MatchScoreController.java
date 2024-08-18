@@ -1,13 +1,12 @@
 package Controller;
 
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.MatchScore;
 import service.MainGameService;
-import service.OngoingMatchesService;
 import validation.MatchValidate;
 import validation.PlayerValidate;
 import java.io.IOException;
@@ -16,13 +15,13 @@ import java.util.UUID;
 @WebServlet(name = "match-score", urlPatterns = "/match-score")
 public class MatchScoreController extends HttpServlet {
 
-    private final MainGameService mainGameService;
+    private MainGameService mainGameService;
     private final PlayerValidate playerValidate = PlayerValidate.getInstance();
     private final MatchValidate matchValidate = MatchValidate.getInstance();
 
-
-    public MatchScoreController() {
-        this.mainGameService = new MainGameService();
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        mainGameService =  (MainGameService) config.getServletContext().getAttribute("mainGameService");
     }
 
     @Override
@@ -39,7 +38,7 @@ public class MatchScoreController extends HttpServlet {
         doGet(req, resp);
     }
 
-    private Integer getPlayerId(HttpServletRequest req) {
+    private int getPlayerId(HttpServletRequest req) {
         if (playerValidate.isEmptyOrNull(req.getParameter("playerId"))) {
             throw new IllegalArgumentException("Player id is empty or null");
         }
@@ -54,6 +53,6 @@ public class MatchScoreController extends HttpServlet {
        if (matchValidate.isEmptyOrNull(req.getParameter("uuid"))) {
            throw new IllegalArgumentException("UUID is empty or null");
         }
-        return UUID.nameUUIDFromBytes(req.getParameter("uuid").getBytes());
+        return UUID.fromString(req.getParameter("uuid"));
     }
 }
