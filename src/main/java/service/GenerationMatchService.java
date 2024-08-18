@@ -17,9 +17,9 @@ public class GenerationMatchService {
     private final Repository<Player, Integer> playerRepository;
     private final OngoingMatchesService ongoingMatchesService;
 
-    public GenerationMatchService() {
+    public GenerationMatchService(OngoingMatchesService ongoingMatchesService) {
         this.playerRepository = new PlayerRepository();
-        this.ongoingMatchesService = new OngoingMatchesService();
+        this.ongoingMatchesService = ongoingMatchesService;
     }
 
     public Optional<UUID> createNewMatchScores(String firstPlayerName, String secondPlayerName) {
