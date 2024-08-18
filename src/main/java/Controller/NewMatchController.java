@@ -1,5 +1,6 @@
 package Controller;
 
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,11 +16,14 @@ import java.util.UUID;
 @WebServlet(name = "new-match", urlPatterns = "/new-match")
 public class NewMatchController extends HttpServlet {
 
-    private final MainGameService mainGameService;
+
+    private MainGameService mainGameService;
     private final PlayerValidate playerValidate = PlayerValidate.getInstance();
 
-    public NewMatchController() {
-        this.mainGameService = new MainGameService();
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        mainGameService =  (MainGameService) config.getServletContext().getAttribute("mainGameService");
     }
 
     @Override
@@ -27,7 +31,7 @@ public class NewMatchController extends HttpServlet {
         String firstPlayerName = getPlayerName(req, "player1");
         String secondPlayerName = getPlayerName(req, "player2");
         UUID match_id = mainGameService.generationMatchService(firstPlayerName, secondPlayerName);
-        resp.sendRedirect("/match-score?uuid=$" + match_id);
+        resp.sendRedirect("/match-score?uuid=" + match_id);
     }
 
     private String getPlayerName(HttpServletRequest req, String playerName) {
