@@ -14,7 +14,6 @@ public class MatchScoreCalculationService {
 
 
     public void ScoreCalculation(int winPlayerId, UUID matchId) {
-
         MatchScore matchScore = ongoingMatchesService.getMatchScores(matchId)
                 .orElseThrow(() -> new EntityNotFoundException("Object match is not found in scoreModel"));
         //todo validation exist in bd player

@@ -6,18 +6,18 @@ import model.Player;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import repository.PlayerRepository;
-import repository.Repository;
+import repository.SpecPlayerRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
 
-public class GenerationMatchService {
+public class GenerationMatchScoreService {
 
-    private final Repository<Player, Integer> playerRepository;
+    private final SpecPlayerRepository<Player, Integer> playerRepository;
     private final OngoingMatchesService ongoingMatchesService;
 
-    public GenerationMatchService(OngoingMatchesService ongoingMatchesService) {
+    public GenerationMatchScoreService(OngoingMatchesService ongoingMatchesService) {
         this.playerRepository = new PlayerRepository();
         this.ongoingMatchesService = ongoingMatchesService;
     }

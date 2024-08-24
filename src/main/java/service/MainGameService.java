@@ -2,39 +2,45 @@ package service;
 
 import model.MatchScore;
 
-import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
 import java.util.UUID;
 
 public class MainGameService {
     private final MatchScoreCalculationService matchScoreCalculationService;
     private final FinishedMatchesPersistenceService finishedMatchesPersistenceService;
     private final OngoingMatchesService ongoingMatchesService;
-    private final GenerationMatchService generationMatchService;
+    private final GenerationMatchScoreService generationMatchScoreService;
 
     public MainGameService() {
         this.ongoingMatchesService = new OngoingMatchesService();
         this.matchScoreCalculationService = new MatchScoreCalculationService(ongoingMatchesService);
         this.finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(ongoingMatchesService);
-        this.generationMatchService = new GenerationMatchService(ongoingMatchesService);
+        this.generationMatchScoreService = new GenerationMatchScoreService(ongoingMatchesService);
     }
 
-    public void beginGame(Integer playerId, UUID matchId) {
+    public Optional<MatchScore> beginGame(Integer playerId, UUID matchId) {
         matchScoreCalculationService.ScoreCalculation(playerId, matchId);
-        ongoingMatchesService.getMatchScores(matchId)
-                .filter(MatchScore::isMatchEnd)
-                .ifPresent(matchScore -> {
+        Optional<MatchScore> matchScore = getMatchScore(matchId);
+        matchScore.filter(MatchScore::isMatchEnd)
+                .ifPresent(ms -> {
                     finishedMatchesPersistenceService.save(matchId);
                     ongoingMatchesService.removeMatchScores(matchId);
                 });
+        return matchScore;
     }
 
     public UUID generationMatchService(String firstPlayerName, String secondPlayerName) {
-       return generationMatchService.createNewMatchScores(firstPlayerName, secondPlayerName)
+       return generationMatchScoreService.createNewMatchScores(firstPlayerName, secondPlayerName)
                 .orElseThrow(() -> new IllegalArgumentException("UUID is not found"));
     }
 
-    public MatchScore getMatchScore(UUID matchId) {
-        return ongoingMatchesService.getMatchScores(matchId)
-                .orElseThrow(() -> new EntityNotFoundException("Object match is not found in scoreModel"));
+    public Optional<MatchScore> getMatchScore(UUID matchId) {
+        return ongoingMatchesService.getMatchScores(matchId);
     }
+
+    public boolean endGame(UUID matchId){
+       return getMatchScore(matchId).isEmpty();
+    }
+
+
 }
