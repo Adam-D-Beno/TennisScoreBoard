@@ -6,25 +6,17 @@ import org.hibernate.Session;
 import java.util.List;
 import java.util.Optional;
 
-@NoArgsConstructor
-public class PlayerRepository implements Repository<Player, Integer> {
+public class PlayerRepository implements SpecPlayerRepository<Player, Integer> {
 
     @Override
-    public Optional<Player> save(Player player, Session session) {
-        session.save(player);
-        return Optional.ofNullable(player);
+    public Optional<Player> save(Player entity, Session session) {
+        session.save(entity);
+        return Optional.ofNullable(entity);
     }
 
     @Override
-    public Optional<Player> getById(Integer id, Session session ) {
+    public Optional<Player> getById(Integer id, Session session) {
         return Optional.ofNullable(session.get(Player.class, id));
-    }
-
-    @Override
-    public Optional<List<Player>> getAllGames(Session session) {
-        return Optional.ofNullable(
-                session.createQuery("select p from Player p", Player.class).getResultList()
-        );
     }
 
     @Override
