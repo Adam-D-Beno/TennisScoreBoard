@@ -1,0 +1,73 @@
+@media (min-width: 320px) and (max-width: 1200px) {
+    .homeBtn {
+        width: 100%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .homeBtn {
+        width: 20%;
+    }
+}
+
+.content-body {
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    width: 100%;
+}
+
+td {
+    padding: 5px;
+    text-align: center;
+    border: 2px solid #2b2d42;
+    font: 1.2em/1.4em Tahoma;
+}
+
+thead {
+    color: #3a86ff;
+}
+
+.player {
+    width: 50%;
+    font-weight: bold;
+}
+
+.set {
+    width: 50%;
+    font-weight: bold;
+}
+
+.links-cnt {
+    width: 100%;
+    margin-top: 10px;
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text:decoration: none;
+}
+
+.homeBtn {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    height: 8vh;
+    background: #3a86ff;
+    color: #fdfffc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    text-decoration: none;
+    align-self: center;
+}
+
+.homeBtn:hover {
+    background: #2b77f0;
+}
