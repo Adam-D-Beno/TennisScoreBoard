@@ -1,7 +1,6 @@
 package model;
 
 import lombok.*;
-import util.PointNumberWon;
 
 import javax.persistence.*;
 
