@@ -1,18 +1,21 @@
 package repository;
 
+import lombok.NoArgsConstructor;
 import model.Match;
 import lombok.RequiredArgsConstructor;
+import model.Player;
 import org.hibernate.Session;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
-public class MatchRepository implements Repository<Match, Integer> {
+public class MatchRepository implements SpecMatchRepository<Match, Integer> {
 
     @Override
-    public Optional<Match> save(Match match, Session session) {
-        session.save(match);
-        return Optional.ofNullable(match);
+    public Optional<Match> save(Match entity, Session session) {
+        session.save(entity);
+        return Optional.ofNullable(entity);
     }
 
     @Override
@@ -21,12 +24,7 @@ public class MatchRepository implements Repository<Match, Integer> {
     }
 
     @Override
-    public Optional<List<Match>> getAllGames(Session session) {
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Match> getByName(String name, Session session) {
-        return Optional.empty();
+    public List<Match> getByWinPlayerName(String winPlayerName, Session session) {
+        return Collections.emptyList();
     }
 }
