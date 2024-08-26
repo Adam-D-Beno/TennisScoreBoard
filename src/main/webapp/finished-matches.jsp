@@ -15,7 +15,7 @@
                 <div class="nav-list">
                     <a class="nav-link" href="index.jsp"><div>HOME</div></a>
                     <a class="nav-link" href="new-match.jsp"><div>NEW</div></a>
-                    <a class="nav-link" href="finished-matches.jsps"><div>MATCHES</div></a>
+                    <a class="nav-link" href="finished-matches.jsp"><div>MATCHES</div></a>
                 </div>
             </nav>
         </header>
@@ -26,13 +26,15 @@
                 <h1>Finished matches</h1>
                 <div class="content-body">
                     <div class="filter">
-                        <form action="ttp://localhost:8080/matches">
-                            <%--@declare id="filter_by_player_name"--%>
-                            <label class="nameLabel" for="filter_by_player_name">Name:</label>
+                        <form action="matches">
+                            <%--@declare id="filter_by_player_name"--%><label class="nameLabel" for="filter_by_player_name">Name:</label>
                             <input id="playerNameInput" class="playerName" type="text" value="${playerName}" name="filter_by_player_name">
                             <input type="submit" value="Search" class="filterButton" />
                             <a href="matches" class="clearLink"><input type="button" value="Clear" class="clearButton" /></a>
                         </form>
+                        <c:if test="${error != null}">
+                            <div class="error">${error}</div>
+                        </c:if>
                     </div>
                     <table>
                         <thead>
