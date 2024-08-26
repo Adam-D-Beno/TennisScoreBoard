@@ -1,4 +1,4 @@
-package context;
+package contextListener;
 
 import config.HibernateConfig;
 import jakarta.servlet.ServletContextEvent;
