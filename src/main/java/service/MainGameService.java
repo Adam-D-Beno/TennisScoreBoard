@@ -1,7 +1,10 @@
 package service;
 
+import dto.PageDto;
+import mapper.MapperDto;
 import model.MatchScore;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,12 +13,14 @@ public class MainGameService {
     private final FinishedMatchesPersistenceService finishedMatchesPersistenceService;
     private final OngoingMatchesService ongoingMatchesService;
     private final GenerationMatchScoreService generationMatchScoreService;
+    private final MapperDto mapperDto;
 
     public MainGameService() {
         this.ongoingMatchesService = new OngoingMatchesService();
         this.matchScoreCalculationService = new MatchScoreCalculationService(ongoingMatchesService);
         this.finishedMatchesPersistenceService = new FinishedMatchesPersistenceService(ongoingMatchesService);
         this.generationMatchScoreService = new GenerationMatchScoreService(ongoingMatchesService);
+        this.mapperDto = new MapperDto();
     }
 
     public Optional<MatchScore> beginGame(Integer playerId, UUID matchId) {
@@ -27,6 +32,11 @@ public class MainGameService {
                     ongoingMatchesService.removeMatchScores(matchId);
                 });
         return matchScore;
+    }
+
+    public List<PageDto> getMatchesPlayed(int pageNumber, String playerName) {
+        return finishedMatchesPersistenceService.getMatchesByPlayerName(pageNumber,playerName)
+                .stream().map(mapperDto::toDto).toList();
     }
 
     public UUID generationMatchService(String firstPlayerName, String secondPlayerName) {
@@ -41,6 +51,5 @@ public class MainGameService {
     public boolean endGame(UUID matchId){
        return getMatchScore(matchId).isEmpty();
     }
-
 
 }
