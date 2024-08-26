@@ -13,11 +13,11 @@ public class MatchValidate {
         return INSTANCE;
     }
 
-    public boolean isExist(Match match) {
-        return match == null;
-    }
-
     public boolean isEmptyOrNull(String str) {
         return StringUtils.isNullOrEmpty(str);
+    }
+
+    public boolean isNumber(String number) {
+        return StringUtils.isNumber(number);
     }
 }
