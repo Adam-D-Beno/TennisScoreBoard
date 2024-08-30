@@ -26,7 +26,7 @@ public class MatchRepository implements SpecMatchRepository<Match, Integer> {
     }
 
     @Override
-    public List<Match> getByWinPlayerName(int pageSize, int pageNumber, String winPlayerName, Session session) {
+    public List<Match> getByPlayerName(int pageSize, int pageNumber, String PlayerName, Session session) {
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Match> criteriaQuery = criteriaBuilder.createQuery(Match.class);
         Root<Match> matchRoot = criteriaQuery.from(Match.class);
