@@ -1,6 +1,6 @@
 package dto;
 
-public record PageDto(
+public record MatchDto(
         int id,
         String firstPlayer,
         String secondPlayer,
