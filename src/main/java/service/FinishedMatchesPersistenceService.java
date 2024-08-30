@@ -39,14 +39,14 @@ public class FinishedMatchesPersistenceService {
         }
     }
 
-    public List<Match> getMatchesByPlayerName(int MATCHES_ON_PAGE, int pageNumber, String winPlayerName) {
+    public List<Match> getMatchesByPlayerName(int MATCHES_ON_PAGE, int pageNumber, String PlayerName) {
         Session session = HibernateConfig
                 .getInstance()
                 .getSessionFactory()
                 .getCurrentSession();
 
         session.beginTransaction();
-        List<Match> matches = matchRepository.getByWinPlayerName(MATCHES_ON_PAGE, pageNumber, winPlayerName, session);
+        List<Match> matches = matchRepository.getByPlayerName(MATCHES_ON_PAGE, pageNumber, PlayerName, session);
         session.getTransaction().commit();
         return matches;
     }
