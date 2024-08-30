@@ -1,11 +1,11 @@
 package mapper;
 
-import dto.PageDto;
+import dto.MatchDto;
 import model.Match;
 
 public class MapperDto {
-    public PageDto toDto(Match match) {
-        return new PageDto(
+    public MatchDto toDto(Match match) {
+        return new MatchDto(
                 match.getId(),
                 match.getFirstPlayer().getName(),
                 match.getSecondPlayer().getName(),
