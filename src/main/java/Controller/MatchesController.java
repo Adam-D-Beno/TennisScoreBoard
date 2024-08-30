@@ -24,9 +24,8 @@ public class MatchesController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int page = getPage(req);
-        String playerName = getPlayerName(req);
-        req.setAttribute("content", mainGameService.getMatchesPlayed(page, playerName));
+        req.setAttribute("content", mainGameService.getMatchesPlayed(getPage(req), getPlayerName(req)));
+        req.setAttribute("totalPages", mainGameService.getTotalPages());
         req.getRequestDispatcher("/finished-matches.jsp").forward(req,resp);
 
     }
