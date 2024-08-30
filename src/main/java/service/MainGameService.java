@@ -1,6 +1,6 @@
 package service;
 
-import dto.PageDto;
+import dto.MatchDto;
 import mapper.MapperDto;
 import model.MatchScore;
 
@@ -14,6 +14,7 @@ public class MainGameService {
     private final OngoingMatchesService ongoingMatchesService;
     private final GenerationMatchScoreService generationMatchScoreService;
     private final MapperDto mapperDto;
+    private static final int MATCHES_ON_PAGE = 5;
 
     public MainGameService() {
         this.ongoingMatchesService = new OngoingMatchesService();
@@ -34,9 +35,13 @@ public class MainGameService {
         return matchScore;
     }
 
-    public List<PageDto> getMatchesPlayed(int pageNumber, String playerName) {
-        return finishedMatchesPersistenceService.getMatchesByPlayerName(pageNumber,playerName)
+    public List<MatchDto> getMatchesPlayed(int pageNumber, String playerName) {
+        return finishedMatchesPersistenceService.getMatchesByPlayerName(MATCHES_ON_PAGE, pageNumber,playerName)
                 .stream().map(mapperDto::toDto).toList();
+    }
+
+    public int getTotalPages() {
+        return  (int) Math.ceil((double) finishedMatchesPersistenceService.getTotalPage() / MATCHES_ON_PAGE);
     }
 
     public UUID generationMatchService(String firstPlayerName, String secondPlayerName) {
