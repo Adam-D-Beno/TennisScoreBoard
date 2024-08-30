@@ -14,7 +14,6 @@ import java.util.UUID;
 public class FinishedMatchesPersistenceService {
     private final SpecMatchRepository<Match, Integer> matchRepository;
     private final OngoingMatchesService ongoingMatchesService;
-    private static final int MATCHES_ON_PAGE = 5;
 
     public FinishedMatchesPersistenceService(OngoingMatchesService ongoingMatchesService) {
         this.matchRepository = new MatchRepository();
@@ -22,10 +21,25 @@ public class FinishedMatchesPersistenceService {
     }
 
     public void save(UUID matchId) {
-        executionTransaction(toMatch(matchId));
+
+        Session session = HibernateConfig
+                .getInstance()
+                .getSessionFactory()
+                .getCurrentSession();
+        try {
+            session.beginTransaction();
+            matchRepository.save(toMatch(matchId), session);
+            session.getTransaction().commit();
+
+        } catch (Exception e) {
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            throw new HibernateException(e);
+        }
     }
 
-    public List<Match> getMatchesByPlayerName(int pageNumber, String winPlayerName) {
+    public List<Match> getMatchesByPlayerName(int MATCHES_ON_PAGE, int pageNumber, String winPlayerName) {
         Session session = HibernateConfig
                 .getInstance()
                 .getSessionFactory()
@@ -35,24 +49,6 @@ public class FinishedMatchesPersistenceService {
         List<Match> matches = matchRepository.getByWinPlayerName(MATCHES_ON_PAGE, pageNumber, winPlayerName, session);
         session.getTransaction().commit();
         return matches;
-    }
-
-    private void executionTransaction(Match match) {
-        Session session = HibernateConfig
-                .getInstance()
-                .getSessionFactory()
-                .getCurrentSession();
-        try {
-            session.beginTransaction();
-            matchRepository.save(match, session);
-            session.getTransaction().commit();
-
-        } catch (Exception e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
-            throw new HibernateException(e);
-        }
     }
 
     private Match toMatch(UUID matchId) {
@@ -73,6 +69,7 @@ public class FinishedMatchesPersistenceService {
 
         session.beginTransaction();
         long totalMatches = matchRepository.getTotalMatches(session);
+
         session.getTransaction().commit();
         return totalMatches;
     }
