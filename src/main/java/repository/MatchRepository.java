@@ -30,22 +30,19 @@ public class MatchRepository implements SpecMatchRepository<Match, Integer> {
         CriteriaQuery<Match> criteriaQuery = cb.createQuery(Match.class);
         Root<Match> match = criteriaQuery.from(Match.class);
 
-        if (!StringUtils.isNullOrEmpty(playerName)) {
+        if (StringUtils.isNullOrEmpty(playerName)) {
+            criteriaQuery.select(match);
+        } else {
             Join<Match, Player> p1 = match.join("firstPlayer");
             Join<Match, Player> p2 = match.join("secondPlayer");
             Predicate p1Predicate = cb.equal(p1.get("name"), playerName);
             Predicate p2Predicate = cb.equal(p2.get("name"), playerName);
             Predicate finalPredicate = cb.or(p1Predicate, p2Predicate);
             criteriaQuery.select(match).where(finalPredicate);
-        } else {
-            criteriaQuery.select(match);
         }
-
         Query query = session.createQuery(criteriaQuery);
-
         query.setFirstResult((pageNumber - 1) * pageSize);
         query.setMaxResults(pageSize);
-
         return query.getResultList();
     }
 
